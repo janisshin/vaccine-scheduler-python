@@ -81,3 +81,21 @@ class Caregiver:
             raise
         finally:
             cm.close_connection()
+
+    def show_appointments(self):
+        cm = ConnectionManager()
+        conn = cm.create_connection()
+        cursor = conn.cursor()
+
+        show_appointments = "SELECT ApptID, Name, Time, pUsername FROM Appointments WHERE cUsername = (%s) ORDER BY ApptID"
+        try:
+            cursor.execute(show_appointments, (self.username))
+            
+            for row in cursor:
+                print(str(row[0]) + " " + str(row[1]) + " " + str(row[2]) + " " + str(row[3]))
+
+        except pymssql.Error:
+            print("pymssql error occurred when running Caregiver.show_appointments")
+            raise
+        finally:
+            cm.close_connection()

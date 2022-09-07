@@ -1,34 +1,34 @@
-CREATE TABLE Insurance (
-  InsurerID BIGINT PRIMARY KEY,
-  CompanyName VARCHAR(255) NOT NULL
+CREATE TABLE Caregivers (
+    Username varchar(255),
+    Salt BINARY(16),
+    Hash BINARY(16),
+    PRIMARY KEY (Username)
 );
 
-CREATE TABLE Patient (
-  PatientID BIGINT PRIMARY KEY,
-  PatientName VARCHAR(255) NOT NULL,
-  ZipCode INT NOT NULL,
-  IID BIGINT REFERENCES Insurance,
-  InsurancePolicy VARCHAR
+CREATE TABLE Patients (
+    Username varchar(255),
+    Salt BINARY(16),
+    Hash BINARY(16),
+    PRIMARY KEY (Username)
 );
 
-CREATE TABLE Clinic (
-  ClinicID BIGINT PRIMARY KEY,
-  ClinicName VARCHAR(255) NOT NULL,
-  Address VARCHAR(255) NOT NULL
+CREATE TABLE Availabilities (
+    Time date,
+    Username varchar(255) REFERENCES Caregivers,
+    PRIMARY KEY (Time, Username)
 );
 
-CREATE TABLE Visits (
-  VisitID BIGINT PRIMARY KEY,
-  PID BIGINT REFERENCES Patient NOT NULL,
-  CID BIGINT REFERENCES Clinic NOT NULL,
-  Reason VARCHAR(255) NOT NULL,
-  VisitTime DATE NOT NULL,
-  Cost MONEY NOT NULL,
-  Debt MONEY NOT NULL
+CREATE TABLE Vaccines (
+    Name varchar(255),
+    Doses int,
+    PRIMARY KEY (Name)
 );
 
-CREATE TABLE AcceptedBy (
-  IID BIGINT REFERENCES Insurance,
-  CID BIGINT REFERENCES Clinic,
-  PRIMARY KEY (IID, CID)
+CREATE TABLE Appointments (
+    ApptID int,
+    cUsername varchar(255) REFERENCES Caregivers,
+    pUsername varchar(255) REFERENCES Patients,
+    Time date,
+    Name varchar(255) REFERENCES Vaccines,
+    PRIMARY KEY (ApptID)
 );
